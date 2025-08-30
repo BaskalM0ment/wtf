@@ -21,26 +21,20 @@
 <body>
   <div id="enter">Enter Site</div>
 
-  <!-- load 4 sounds -->
-  <audio id="s1" src="another-loud-no-82703.mp3"></audio>
-  <audio id="s2" src="loud-smoke-alarm-unplug-26528.mp3"></audio>
-  <audio id="s3" src="loud-fog-horn-47514.mp3"></audio>
-  <audio id="s4" src="big-aaaaaaaaaah-103115.mp3"></audio>
-
   <script>
     const enter = document.getElementById("enter");
-    const sounds = [
-      document.getElementById("s1"),
-      document.getElementById("s2"),
-      document.getElementById("s3"),
-      document.getElementById("s4")
+    const soundFiles = [
+      "another-loud-no-82703.mp3",
+      "loud-smoke-alarm-unplug-26528.mp3",
+      "loud-fog-horn-47514.mp3",
+      "big-aaaaaaaaaah-103115.mp3"
     ];
 
     function playRandom() {
-      const choice = sounds[Math.floor(Math.random() * sounds.length)];
-      choice.currentTime = 0;
-      choice.play().catch(err => console.log("Playback error:", err));
-      choice.onended = playRandom; // keep looping
+      const file = soundFiles[Math.floor(Math.random() * soundFiles.length)];
+      const audio = new Audio(file); // create dynamically on demand
+      audio.play().catch(err => console.log("Playback error:", err));
+      audio.onended = playRandom; // keep looping forever
     }
 
     enter.addEventListener("click", () => {
