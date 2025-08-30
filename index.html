@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Enter Site</title>
+  <style>
+    body {
+      margin:0;
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background:black;
+      color:white;
+      font-family:sans-serif;
+      font-size:2rem;
+      cursor:pointer;
+    }
+  </style>
+</head>
+<body>
+  <div id="enter">Enter Site</div>
+
+  <!-- preload 4 sounds -->
+  <audio id="s1" src="another-loud-no-82703.mp3"></audio>
+  <audio id="s2" src="loud-smoke-alarm-unplug-26528.mp3"></audio>
+  <audio id="s3" src="loud-fog-horn-47514.mp3"></audio>
+  <audio id="s4" src="big-aaaaaaaaaah-103115.mp3"></audio>
+
+  <script>
+    const enter = document.getElementById("enter");
+    const sounds = [
+      document.getElementById("s1"),
+      document.getElementById("s2"),
+      document.getElementById("s3"),
+      document.getElementById("s4")
+    ];
+
+    function playRandom() {
+      const choice = sounds[Math.floor(Math.random() * sounds.length)];
+      choice.currentTime = 0;
+      choice.play().catch(err => console.log("Playback error:", err));
+
+      choice.onended = playRandom; // loop forever
+    }
+
+    enter.addEventListener("click", () => {
+      // clear the page so it's empty
+      document.body.innerHTML = "";
+      document.body.style.background = "black";
+      document.body.style.cursor = "default";
+
+      // start infinite random playback
+      playRandom();
+    });
+  </script>
+</body>
+</html>
