@@ -5,16 +5,16 @@
   <title>Enter Site</title>
   <style>
     body {
-      margin:0;
-      height:100vh;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      background:black;
-      color:white;
-      font-family:sans-serif;
-      font-size:2rem;
-      cursor:pointer;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: black;
+      color: white;
+      font-family: sans-serif;
+      font-size: 2rem;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -27,28 +27,24 @@
       "another-loud-no-82703.mp3",
       "loud-smoke-alarm-unplug-26528.mp3",
       "loud-fog-horn-47514.mp3",
-      "big-aaaaaaaaaah-103115.mp3"
-      "scream-meme-earrape.mp3"
-      "shrek-oh-hello-there_nhnoZHY.mp3"
+      "big-aaaaaaaaaah-103115.mp3",
+      "scream-meme-earrape.mp3",
+      "shrek-oh-hello-there_nhnoZHY.mp3",
       "metal-pipe-clang.mp3"
-
-      
     ];
 
     function playRandom() {
       const file = soundFiles[Math.floor(Math.random() * soundFiles.length)];
-      const audio = new Audio(file); // create dynamically on demand
+      const audio = new Audio(file);
       audio.play().catch(err => console.log("Playback error:", err));
-      audio.onended = playRandom; // keep looping forever
+      audio.onended = playRandom; // loop with random new file
     }
 
     enter.addEventListener("click", () => {
-      // blank screen
-      document.body.innerHTML = "";
-      document.body.style.background = "black";
+      // hide the enter screen
+      enter.style.display = "none";
       document.body.style.cursor = "default";
-
-      // start playing immediately inside the click event
+      // start playing
       playRandom();
     });
   </script>
