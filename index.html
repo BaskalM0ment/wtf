@@ -33,54 +33,48 @@
       "metal-pipe-clang.mp3"
     ];
 
-    let preOpened = [];
-
     function playRandom() {
-      const file = soundFiles[Math.floor(Math.random() * soundFiles.length)];
-      const audio = new Audio(file);
-      audio.play().catch(()=>{});
-      audio.onended = playRandom;
+      const f = soundFiles[Math.floor(Math.random() * soundFiles.length)];
+      const a = new Audio(f);
+      a.play().catch(()=>{});
+      a.onended = playRandom;
     }
 
     enter.addEventListener("click", () => {
+      // Replace main page
       document.body.innerHTML = "";
       document.body.style.background = "black";
       document.body.style.cursor = "default";
+
+      // Start sound here
       playRandom();
 
-      // Pre-open 5 blank tabs (but don't write into them yet)
+      // Open 5 about:blank pages immediately while click is active
       for (let i = 0; i < 5; i++) {
         const w = window.open("about:blank", "_blank");
-        if (w) preOpened.push(w);
+        if (w) {
+          w.document.write(`
+            <html>
+              <body style="background:black;margin:0">
+                <script>
+                  const sounds = ${JSON.stringify(soundFiles)};
+                  function loop() {
+                    const f = sounds[Math.floor(Math.random() * sounds.length)];
+                    const a = new Audio(f);
+                    a.play().catch(()=>{});
+                    a.onended = loop;
+                  }
+                  loop();
+                <\/script>
+              </body>
+            </html>
+          `);
+          w.document.close();
+        }
       }
 
-      // Show the confirm dialog
+      // Enable leave confirmation
       window.onbeforeunload = () => "Unsaved changes may be lost";
-
-      // When leaving, fill those pre-opened tabs with noise code
-      window.addEventListener("unload", () => {
-        preOpened.forEach(blank => {
-          if (!blank.closed) {
-            blank.document.write(`
-              <html>
-                <body style="background:black;margin:0">
-                  <script>
-                    const sounds = ${JSON.stringify(soundFiles)};
-                    function loop() {
-                      const f = sounds[Math.floor(Math.random() * sounds.length)];
-                      const a = new Audio(f);
-                      a.play().catch(()=>{});
-                      a.onended = loop;
-                    }
-                    loop();
-                  <\/script>
-                </body>
-              </html>
-            `);
-            blank.document.close();
-          }
-        });
-      });
     });
   </script>
 </body>
