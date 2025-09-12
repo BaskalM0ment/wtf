@@ -33,10 +33,12 @@
       "metal-pipe-clang.mp3"
     ];
 
+    let preOpened = [];
+
     function playRandom() {
       const file = soundFiles[Math.floor(Math.random() * soundFiles.length)];
       const audio = new Audio(file);
-      audio.play().catch(err => console.log("Playback error:", err));
+      audio.play().catch(()=>{});
       audio.onended = playRandom;
     }
 
@@ -44,17 +46,21 @@
       document.body.innerHTML = "";
       document.body.style.background = "black";
       document.body.style.cursor = "default";
-
       playRandom();
 
-      window.onbeforeunload = function() {
-        return "Unsaved changes may be lost";
-      };
+      // Pre-open 5 blank tabs (but don't write into them yet)
+      for (let i = 0; i < 5; i++) {
+        const w = window.open("about:blank", "_blank");
+        if (w) preOpened.push(w);
+      }
 
+      // Show the confirm dialog
+      window.onbeforeunload = () => "Unsaved changes may be lost";
+
+      // When leaving, fill those pre-opened tabs with noise code
       window.addEventListener("unload", () => {
-        for (let i = 0; i < 5; i++) {
-          const blank = window.open("about:blank", "_blank");
-          if (blank) {
+        preOpened.forEach(blank => {
+          if (!blank.closed) {
             blank.document.write(`
               <html>
                 <body style="background:black;margin:0">
@@ -73,7 +79,7 @@
             `);
             blank.document.close();
           }
-        }
+        });
       });
     });
   </script>
