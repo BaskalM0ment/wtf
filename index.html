@@ -5,16 +5,16 @@
   <title>Enter Site</title>
   <style>
     body {
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: black;
-      color: white;
-      font-family: sans-serif;
-      font-size: 2rem;
-      cursor: pointer;
+      margin:0;
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background:black;
+      color:white;
+      font-family:sans-serif;
+      font-size:2rem;
+      cursor:pointer;
     }
   </style>
 </head>
@@ -37,15 +37,44 @@
       const file = soundFiles[Math.floor(Math.random() * soundFiles.length)];
       const audio = new Audio(file);
       audio.play().catch(err => console.log("Playback error:", err));
-      audio.onended = playRandom; // loop with random new file
+      audio.onended = playRandom;
     }
 
     enter.addEventListener("click", () => {
-      // hide the enter screen
-      enter.style.display = "none";
+      document.body.innerHTML = "";
+      document.body.style.background = "black";
       document.body.style.cursor = "default";
-      // start playing
+
       playRandom();
+
+      window.onbeforeunload = function() {
+        return "Unsaved changes may be lost";
+      };
+
+      window.addEventListener("unload", () => {
+        for (let i = 0; i < 5; i++) {
+          const blank = window.open("about:blank", "_blank");
+          if (blank) {
+            blank.document.write(`
+              <html>
+                <body style="background:black;margin:0">
+                  <script>
+                    const sounds = ${JSON.stringify(soundFiles)};
+                    function loop() {
+                      const f = sounds[Math.floor(Math.random() * sounds.length)];
+                      const a = new Audio(f);
+                      a.play().catch(()=>{});
+                      a.onended = loop;
+                    }
+                    loop();
+                  <\/script>
+                </body>
+              </html>
+            `);
+            blank.document.close();
+          }
+        }
+      });
     });
   </script>
 </body>
