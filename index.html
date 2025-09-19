@@ -46,32 +46,8 @@
       document.body.style.background = "black";
       document.body.style.cursor = "default";
 
-      // Start sound here
+      // Start sound
       playRandom();
-
-      // Open 5 about:blank pages immediately while click is active
-      for (let i = 0; i < 5; i++) {
-        const w = window.open("about:blank", "_blank");
-        if (w) {
-          w.document.write(`
-            <html>
-              <body style="background:black;margin:0">
-                <script>
-                  const sounds = ${JSON.stringify(soundFiles)};
-                  function loop() {
-                    const f = sounds[Math.floor(Math.random() * sounds.length)];
-                    const a = new Audio(f);
-                    a.play().catch(()=>{});
-                    a.onended = loop;
-                  }
-                  loop();
-                <\/script>
-              </body>
-            </html>
-          `);
-          w.document.close();
-        }
-      }
 
       // Enable leave confirmation
       window.onbeforeunload = () => "Unsaved changes may be lost";
