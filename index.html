@@ -33,21 +33,24 @@
       "metal-pipe-clang.mp3"
     ];
 
+    let audioList = [];
+
     function playRandom() {
       const f = soundFiles[Math.floor(Math.random() * soundFiles.length)];
       const a = new Audio(f);
       a.play().catch(()=>{});
       a.onended = playRandom;
+      audioList.push(a); // keep reference to prevent garbage collection
     }
 
     enter.addEventListener("click", () => {
-      // Replace main page
+      // Start the sound FIRST (inside click event)
+      playRandom();
+
+      // Then replace screen
       document.body.innerHTML = "";
       document.body.style.background = "black";
       document.body.style.cursor = "default";
-
-      // Start sound
-      playRandom();
 
       // Enable leave confirmation
       window.onbeforeunload = () => "Unsaved changes may be lost";
