@@ -30,7 +30,7 @@
       "big-aaaaaaaaaah-103115.mp3",
       "scream-meme-earrape.mp3",
       "shrek-oh-hello-there_nhnoZHY.mp3",
-      "metal-pipe-clang.mp3"
+      "metal-pipe-clang.mp3",
       "knarklabb-i-badrummet.mp3"
     ];
 
@@ -45,13 +45,13 @@
     }
 
     enter.addEventListener("click", () => {
-      // Start the sound FIRST (inside click event)
+      // Start sound immediately
       playRandom();
 
-      // Then replace screen
-      document.body.innerHTML = "";
-      document.body.style.background = "black";
+      // Hide Enter button instead of replacing body
+      enter.style.display = "none";
       document.body.style.cursor = "default";
+      document.body.style.background = "black";
 
       // Enable leave confirmation
       window.onbeforeunload = () => "Unsaved changes may be lost";
